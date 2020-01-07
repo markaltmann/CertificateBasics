@@ -17,6 +17,8 @@ OpenSSL is used to create certificates and Caddy is used to simply have a versat
 Caddy is now using a json format that you should adapt from the provided caddy.json:
 
 If you have installed the tools, run the "create_certs.sh" to create your certs. 
+![Certificate Creation](images/CertificateCreation.png)
+
 Now you can start the Caddy Server with the local TLS config (Details in the caddy.json)
 
 ```bash
