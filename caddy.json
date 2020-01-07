@@ -1,0 +1,47 @@
+{
+	"apps": {
+		"http": {
+			"servers": {
+				"srv0": {
+					"listen": [
+						":2020"
+					],
+					"routes": [
+						{
+							"match": [
+								{
+									"host": [
+										"localhost"
+									]
+								}
+							],
+							"handle": [{
+									"handler": "static_response",
+									"body": "Hello world!\n"
+							}]
+						}
+					],
+					"tls_connection_policies": [
+						{
+							"match": {
+								"sni": [
+									"localhost"
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"tls": {
+			"certificates": {
+				"load_files": [
+					{
+						"certificate": "cert_localhost.pem",
+						"key": "key_localhost.pem"
+					}
+				]
+			}
+		}
+	}
+}
