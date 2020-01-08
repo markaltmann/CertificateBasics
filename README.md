@@ -21,23 +21,23 @@ OpenSSL is used to create certificates and Caddy is used to simply have a versat
 
 Caddy is now using a json format that you should adapt from the provided caddy.json:
 
-If you have installed the tools, run the "create_certs.sh" to create your certs. 
+If you have installed the tools, run the "create_certs.sh" to create your certs.  
 ![Certificate Creation](images/CertificateCreation.png)
 
 Now you can start the Caddy Server with the local TLS config (Details in the caddy.json)
 
 ```bash
 To start Caddy:
-$ caddy start --config caddy.json
+\$ caddy start --config caddy.json
 
 To stop Caddy:
-$ caddy stop
+\$ caddy stop
 ```
 
 When the start was successful, you should see something like this:
 
 ```bash
-mark@aragorn:~/Git/CertificateBasics$ caddy start --config caddy.json 
+mark@aragorn:~/Git/CertificateBasics$ caddy start --config caddy.json  
 2020/01/07 22:53:05.468 INFO    admin   admin endpoint started  {"address": "localhost:2019", "enforce_origin": false, "origins": ["localhost:2019"]}
 2020/01/07 23:53:05 [INFO][cache:0xc000265540] Started certificate maintenance routine
 2020/01/07 23:53:05 [WARNING] Stapling OCSP: no OCSP stapling for [localhost]: no OCSP server specified in certificate
@@ -76,7 +76,7 @@ And for good reason, if a malicious party could put themselves in between my bro
 Hence every system that can speak http/tls has provided CA certs in a bundle file. Some browsers like Firefox bring their own one, Chrome and IE take the one from the system and Java is so os-idependent it uses also it's own keystore. The very same is true for python, which uses the "certifi" package.
 
 ```bash
-curl https://localhost:2020 --cacert cert_localhost.pem 
+curl https://localhost:2020 --cacert cert_localhost.pem  
 Hello world!
 ```
 
