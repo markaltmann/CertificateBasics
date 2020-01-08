@@ -4,6 +4,11 @@ Today we look at certificate Basics and how the trust works generally, and how c
 
 ## Prerequisites
 
+We need [Caddy](https://github.com/caddyserver/caddy/releases) and [OpenSSL](https://github.com/openssl/openssl/releases) on your system so the script works.
+If you use the Bosch Git, you already have a basic bash and the script should work on your Windows OS as well...  
+OpenSSL can also simply be installed through the Anaconda3 package (python environment) via Bosch SCCM.  
+For more information on Caddy find some more information here: <https://caddyserver.com/docs/>
+
 ```bash
 mark@aragorn:~$ caddy version
 v2.0.0-beta11 h1:NVHnPAdZPt6OUBMltUMe2DWVsyYRbeE6NxhCm3AjGT8=
