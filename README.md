@@ -1,40 +1,44 @@
 # Certificate Basics
 
-Today we look at certificate Basics and how the trust works generally, and how certain details are working in Windows vs Linux. And maybe some macOS.
+Today we look at certificate Basics, how trust generally works, and specific details when working with Windows vs. Linux.
+
 
 ## Prerequisites
 
-We need [Caddy](https://github.com/caddyserver/caddy/releases) and [OpenSSL](https://github.com/openssl/openssl/releases) on your system so the script works.
-If you use the Bosch Git, you already have a basic bash and the script should work on your Windows OS as well...  
-OpenSSL can also simply be installed through the Anaconda3 package (python environment) via Bosch SCCM.  
-For more information on Caddy find some more information here: <https://caddyserver.com/docs/>
+We need [Caddy](https://github.com/caddyserver/caddy/releases) and [OpenSSL](https://github.com/openssl/openssl/releases) installed on your system for the setup script.
+If you use the Bosch Git, you already have a basic bash, and the script should work on your Windows OS. 
+
+> OpenSSL can also be installed through the Anaconda3 package (python environment) via Bosch SCCM.   
+More information on Caddy can be found here: <https://caddyserver.com/docs/>.
 
 ```bash
 mark@aragorn:~$ caddy version
 v2.0.0-beta11 h1:NVHnPAdZPt6OUBMltUMe2DWVsyYRbeE6NxhCm3AjGT8=
+
 mark@aragorn:~$ openssl version
 OpenSSL 1.1.0l  10 Sep 2019
-mark@aragorn:~$
 ```
 
-OpenSSL is used to create certificates and Caddy is used to simply have a versatile WebServer on your localhost.
 
-Caddy is now using a json format that you should adapt from the provided caddy.json:
+## Setup
 
-If you have installed the tools, run the "create_certs.sh" to create your certs.  
+OpenSSL is used to create certificates and Caddy to have a versatile WebServer running on localhost.
+Caddy is now using a JSON format that you should adopt from the provided caddy.json:
+
+If you have installed the tools, run `create_certs.sh` to create your certs.  
 ![Certificate Creation](images/CertificateCreation.png)
 
 Now you can start the Caddy Server with the local TLS config (Details in the caddy.json)
 
 ```bash
-To start Caddy:
-\$ caddy start --config caddy.json
+# To start Caddy:
+mark@aragorn:~$ caddy start --config caddy.json
 
-To stop Caddy:
-\$ caddy stop
+# To stop Caddy:
+mark@aragorn:~$ caddy stop
 ```
 
-When the start was successful, you should see something like this:
+If the start was successful, you should see something like this:
 
 ```bash
 mark@aragorn:~/Git/CertificateBasics$ caddy start --config caddy.json  
@@ -46,21 +50,20 @@ mark@aragorn:~/Git/CertificateBasics$ caddy start --config caddy.json
 Successfully started Caddy (pid=12056)
 ```
 
+
 ## Test Cases
 
-Now try to see, whether a standard curl request does, what it should do...
+Now try to see whether a standard curl request does, what it should do.
 
-First, lets try the insecure request:
-
+First, let's try the insecure request:
 ```bash
-curl https://localhost:2020 --insecure
+mark@aragorn:~$ curl https://localhost:2020 --insecure
 Hello world!
 ```
 
-Secondly, lets try the secure method:
-
+Secondly, let's try the secure method:
 ```bash
-curl https://localhost:2020
+mark@aragorn:~$ curl https://localhost:2020
 2020/01/08 00:01:51 http: TLS handshake error from [::1]:40426: remote error: tls: unknown certificate authority
 curl: (60) SSL certificate problem: self signed certificate
 More details here: https://curl.haxx.se/docs/sslcerts.html
@@ -70,39 +73,45 @@ If this HTTPS server uses a certificate signed by a CA represented in the bundle
 If you'd like to turn off curl's verification of the certificate, use the -k (or --insecure) option.
 ```
 
-So as we can see, curl told us there is a certificate problem and specifically even a self-signed one...  
-It seems for some odd reason, that my system does not trust this self signed certificate...
-And for good reason, if a malicious party could put themselves in between my browser and the web server, they could practically decrypt all the traffic.  
-Hence every system that can speak http/tls has provided CA certs in a bundle file. Some browsers like Firefox bring their own one, Chrome and IE take the one from the system and Java is so os-idependent it uses also it's own keystore. The very same is true for python, which uses the "certifi" package.
+So as we can see, `curl` told us there is a certificate problem and precisely even a self-signed one...  
+It seems that, for some odd reason, my system does not trust this self signed certificate...
 
+And for a good reason. If a malicious party puts itself in between my browser and the web server, they can practically decrypt all the traffic.  
+Hence every system that can speak http/tls has provided CA certs in a bundle file. Some browsers like Firefox bring their own, Chrome and IE use the one of the system. Java is os-independent and uses its own keystore. The very same is true for python, which uses the "certifi" package.
+
+Lastly, let's try the correct and secure method:
 ```bash
-curl https://localhost:2020 --cacert cert_localhost.pem  
+mark@aragorn:~$ curl https://localhost:2020 --cacert cert_localhost.pem  
 Hello world!
 ```
 
-Another way would have been to add the cert to my ca path in my os, or the key store of my programming language.
+> **Note**:   
+We can also add the cert to the ca path in my os or the key store of my programming language.
+
 
 ## Certificate Handling
 
-Certificates are all about trust. Achieved through cryptography and the private/public key approach.
+Certificates are all about trust.   
+This trust is achieved through cryptography and the private/public key approach.
 
-This means, that for each public certificate there is a corresponding private key to use. The key is being used do decrypt packets, that have been encrypted via the public certificate.
+This means that for each public certificate, there is a corresponding private key to use. The key is used to decrypt packets that have been encrypted with the public certificate.
 
-Furthermore, each certificate ususally exists in a chain. For publicly available sites/endpoints, this starts with a CA (certificate authority) and a subsequent IA (Intermediate authority).  
-The main difference is the validity timeframe and the airgapness of the root certificate versus the intermediate certificate.  
-Reason is, that under no circumstances a 3rd party can gains access to the root CA.
-The intermediate CA is used on connected servers to actually run the service in an automated fashion and that, when a IA has been compromised, it can be replaced fast.  
-Otherwise each cert signing would need a manual effort and copy/paste actions (god forbid...) ;)
+Furthermore, each certificate usually exists in a chain. For publicly available sites/endpoints, this starts with a CA (certificate authority) and a subsequent IA (Intermediate authority).  
+The main difference is the timeframe of validity and the airgapness of the root certificate versus the intermediate certificate.  
+The reason is that under no circumstances, a 3rd party can gain access to the root CA.
+The intermediate CA is used on connected servers to run the service in an automated fashion. In addition to that, IAs can be quickly replaced if they have been compromised.  
+Without them, each cert signing would need a manual effort and copy/paste actions (god forbid...)
 
-This can be simply observed in your browser settings:
+This can be observed in your browser settings:
 
 ![Certificate Main](images/CertificateMain.png)
 
 ![Certificate Details](images/CertificateDetails.png)
 
+
 ## Enterprise Environments
 
-In internal enterprise environments, this is somewhat the same, with the difference that you do not have to rely on the "trusted" 3rd parties by the browser OEMs, but on your enterprise PKI (Public Key Infrastructure).  
+In internal enterprise environments, this is somewhat the same. The difference here is that you do not have to rely on the "trusted" 3rd parties of the browser OEMs, but on your enterprise PKI (Public Key Infrastructure).  
 This PKI is used to create your root and subordinate CAs and can create your needed certificates.  
 Indeed, many cloud providers, like Azure or AWS, do have PKI services backed by HSMs (Hardware Security Module) to achieve the very same in cloud environments.
 
