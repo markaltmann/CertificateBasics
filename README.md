@@ -88,13 +88,30 @@ Hello world!
 > **Note**:   
 We can also add the cert to the ca path in my os or the key store of your programming language. Some information about those:
 
+### Operating Systems
+
 - Linux Standard: "/etc/ssl/certs/ca-certificates.crt"
-- ![Ubuntu](https://help.ubuntu.com/lts/serverguide/certificates-and-security.html)
-- ![RHEL](https://access.redhat.com/documentation/en-US/Red_Hat_Certificate_System/8.0/html/Install_Guide/Configuring_a_CA.html)
-- ![Windows 10](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc754841(v=ws.11)?redirectedfrom=MSDN)
-- ![Firefox](https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/)
-- ![Chrome](https://support.google.com/chrome/a/answer/6080885?hl=en)
+- [Ubuntu](https://help.ubuntu.com/lts/serverguide/certificates-and-security.html)
+- [RHEL](https://access.redhat.com/documentation/en-US/Red_Hat_Certificate_System/8.0/html/Install_Guide/Configuring_a_CA.html)
+- [Windows 10](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/cc754841(v=ws.11)?redirectedfrom=MSDN)
+
+### Browsers
+
+- [Firefox](https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/)
+- [Chrome](https://support.google.com/chrome/a/answer/6080885?hl=en)
 - IE uses the Windows Certificate Store
+
+### Programming Languages
+
+All programming languages use some form of abstraction layer to interact with the TLS stack. Just as in curl, you always have some form of adding your CA file into the keystore either of the system, or your application.
+
+- [Java KeyStore](https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html)
+- [Java Keytool](https://docs.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html)
+- [NPM Hardwired cabundle](https://github.com/nodejs/node/blob/master/src/node_root_certs.h)
+- [Mozilla CA Bundle - base for certifi](https://wiki.mozilla.org/CA/Included_Certificates)
+- [Python Certifi / Requests](https://github.com/certifi/python-certifi)
+- [Ruby Certifi](https://github.com/certifi/ruby-certifi)
+- [Node Certifi](https://github.com/certifi/node-certifi)
 
 ## Certificate Handling
 
