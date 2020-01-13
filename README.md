@@ -86,7 +86,26 @@ Hello world!
 ```
 
 > **Note**:   
-We can also add the cert to the ca path in my os or the key store of your programming language. Some information about those:
+We can also add the cert to the ca path in my os or the key store of your programming language. see more at the end.
+
+## Certificate Handling
+
+Certificates are all about trust.   
+This trust is achieved through cryptography and the private/public key approach.
+
+This means that for each public certificate, there is a corresponding private key to use. The key is used to decrypt packets that have been encrypted with the public certificate.
+
+Furthermore, each certificate usually exists in a chain. For publicly available sites/endpoints, this starts with a CA (certificate authority) and a subsequent IA (Intermediate authority).  
+The main difference is the timeframe of validity and the airgapness of the root certificate versus the intermediate certificate.  
+The reason is that under no circumstances, a 3rd party can gain access to the root CA.
+The intermediate CA is used on connected servers to run the service in an automated fashion. In addition to that, IAs can be quickly replaced if they have been compromised.  
+Without them, each cert signing would need a manual effort and copy/paste actions (god forbid...)
+
+This can be observed in your browser settings:
+
+![Certificate Main](images/CertificateMain.png)
+
+![Certificate Details](images/CertificateDetails.png)
 
 ### Operating Systems
 
@@ -112,25 +131,6 @@ All programming languages use some form of abstraction layer to interact with th
 - [Python Certifi / Requests](https://github.com/certifi/python-certifi)
 - [Ruby Certifi](https://github.com/certifi/ruby-certifi)
 - [Node Certifi](https://github.com/certifi/node-certifi)
-
-## Certificate Handling
-
-Certificates are all about trust.   
-This trust is achieved through cryptography and the private/public key approach.
-
-This means that for each public certificate, there is a corresponding private key to use. The key is used to decrypt packets that have been encrypted with the public certificate.
-
-Furthermore, each certificate usually exists in a chain. For publicly available sites/endpoints, this starts with a CA (certificate authority) and a subsequent IA (Intermediate authority).  
-The main difference is the timeframe of validity and the airgapness of the root certificate versus the intermediate certificate.  
-The reason is that under no circumstances, a 3rd party can gain access to the root CA.
-The intermediate CA is used on connected servers to run the service in an automated fashion. In addition to that, IAs can be quickly replaced if they have been compromised.  
-Without them, each cert signing would need a manual effort and copy/paste actions (god forbid...)
-
-This can be observed in your browser settings:
-
-![Certificate Main](images/CertificateMain.png)
-
-![Certificate Details](images/CertificateDetails.png)
 
 
 ## Enterprise Environments
