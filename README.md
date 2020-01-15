@@ -6,9 +6,9 @@ Today we look at certificate Basics, how trust generally works, and specific det
 ## Prerequisites
 
 We need [Caddy](https://github.com/caddyserver/caddy/releases) and [OpenSSL](https://github.com/openssl/openssl/releases) installed on your system for the setup script.
-If you use the Bosch Git, you already have a basic bash, and the script should work on your Windows OS. 
+If you use the [Git Packacke](https://git-scm.com/download/win), you already have a basic bash, and the script should work on your Windows OS. 
 
-> OpenSSL can also be installed through the Anaconda3 package (python environment) via Bosch SCCM.   
+> OpenSSL can also be installed through the Anaconda3 package (python environment).   
 More information on Caddy can be found here: <https://caddyserver.com/docs/>.
 
 ```bash
@@ -81,7 +81,7 @@ Hence every system that can speak http/tls has provided CA certs in a bundle fil
 
 Lastly, let's try the correct and secure method:
 ```bash
-mark@aragorn:~$ curl https://localhost:2020 --cacert cert_localhost.pem  
+~$ curl https://localhost:2020 --cacert cert_localhost.pem  
 Hello world!
 ```
 
