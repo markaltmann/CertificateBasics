@@ -2,13 +2,12 @@
 
 Today we look at certificate Basics, how trust generally works, and specific details when working with Windows vs. Linux.
 
-
 ## Prerequisites
 
 We need [Caddy](https://github.com/caddyserver/caddy/releases) and [OpenSSL](https://github.com/openssl/openssl/releases) installed on your system for the setup script.
-If you use the [Git Packacke](https://git-scm.com/download/win), you already have a basic bash, and the script should work on your Windows OS. 
+If you use the [Git Package](https://git-scm.com/download/win), you already have a basic bash, and the script should work on your Windows OS.
 
-> OpenSSL can also be installed through the Anaconda3 package (python environment).   
+> OpenSSL can also be installed through the Anaconda3 package (python environment).  
 More information on Caddy can be found here: <https://caddyserver.com/docs/>.
 
 ```bash
@@ -18,7 +17,6 @@ v2.0.0-beta11 h1:NVHnPAdZPt6OUBMltUMe2DWVsyYRbeE6NxhCm3AjGT8=
 ~$ openssl version
 OpenSSL 1.1.0l  10 Sep 2019
 ```
-
 
 ## Setup
 
@@ -50,18 +48,19 @@ If the start was successful, you should see something like this:
 Successfully started Caddy (pid=12056)
 ```
 
-
 ## Test Cases
 
 Now try to see whether a standard curl request does, what it should do.
 
 First, let's try the insecure request:
+
 ```bash
 ~$ curl https://localhost:2020 --insecure
 Hello world!
 ```
 
 Secondly, let's try the secure method:
+
 ```bash
 ~$ curl https://localhost:2020
 2020/01/08 00:01:51 http: TLS handshake error from [::1]:40426: remote error: tls: unknown certificate authority
@@ -80,23 +79,24 @@ And for a good reason. If a malicious party puts itself in between my browser an
 Hence every system that can speak http/tls has provided CA certs in a bundle file. Some browsers like Firefox bring their own, Chrome and IE use the one of the system. Java is os-independent and uses its own keystore. The very same is true for python, which uses the "certifi" package.
 
 Lastly, let's try the correct and secure method:
+
 ```bash
 ~$ curl https://localhost:2020 --cacert cert_localhost.pem  
 Hello world!
 ```
 
-> **Note**:   
+> **Note**:  
 We can also add the cert to the ca path in my os or the key store of your programming language. see more at the end.
 
 ## Certificate Handling
 
-Certificates are all about trust.   
+Certificates are all about trust.  
 This trust is achieved through cryptography and the private/public key approach.
 
 This means that for each public certificate, there is a corresponding private key to use. The key is used to decrypt packets that have been encrypted with the public certificate.
 
 Furthermore, each certificate usually exists in a chain. For publicly available sites/endpoints, this starts with a CA (certificate authority) and a subsequent IA (Intermediate authority).  
-The main difference is the timeframe of validity and the airgapness of the root certificate versus the intermediate certificate.  
+The main difference is the time frame of validity and the airgap-ness of the root certificate versus the intermediate certificate.  
 The reason is that under no circumstances, a 3rd party can gain access to the root CA.
 The intermediate CA is used on connected servers to run the service in an automated fashion. In addition to that, IAs can be quickly replaced if they have been compromised.  
 Without them, each cert signing would need a manual effort and copy/paste actions (god forbid...)
@@ -126,16 +126,15 @@ All programming languages use some form of abstraction layer to interact with th
 
 - [Java KeyStore](https://docs.oracle.com/javase/7/docs/api/java/security/KeyStore.html)
 - [Java Keytool](https://docs.oracle.com/javase/6/docs/technotes/tools/windows/keytool.html)
-- [NPM Hardwired cabundle](https://github.com/nodejs/node/blob/master/src/node_root_certs.h)
+- [NPM Hardwired ca bundle](https://github.com/nodejs/node/blob/master/src/node_root_certs.h)
 - [Mozilla CA Bundle - base for certifi](https://wiki.mozilla.org/CA/Included_Certificates)
 - [Python Certifi / Requests](https://github.com/certifi/python-certifi)
 - [Ruby Certifi](https://github.com/certifi/ruby-certifi)
 - [Node Certifi](https://github.com/certifi/node-certifi)
 
-
 ## Enterprise Environments
 
-In internal enterprise environments, this is somewhat the same. The difference here is that you do not have to rely on the "trusted" 3rd parties of the browser OEMs, but on your enterprise PKI (Public Key Infrastructure).  
+In internal enterprise environments, this is somewhat the same. The difference here is that you do not have to rely on the "trusted" 3rd parties of the browser OEM's, but on your enterprise PKI (Public Key Infrastructure).  
 This PKI is used to create your root and subordinate CAs and can create your needed certificates.  
 Indeed, many cloud providers, like Azure or AWS, do have PKI services backed by HSMs (Hardware Security Module) to achieve the very same in cloud environments.
 
